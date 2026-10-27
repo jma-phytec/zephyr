@@ -103,7 +103,7 @@
 		ranges = <0x0 0x30000000 DT_SIZE_M(16)>;
 		/* MX25U12832FM2I02 is 16MB, 128MBit flash part */
 		size = <DT_SIZE_M(16 * 8)>;
-		spi-max-frequency = <100000000>;
+		spi-max-frequency = <66000000>;
 		jedec-id = [c2 25 38];
 
 		#address-cells = <1>;

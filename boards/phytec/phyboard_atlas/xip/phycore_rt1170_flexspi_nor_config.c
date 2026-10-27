@@ -10,8 +10,8 @@
 #if defined(CONFIG_NXP_IMXRT_BOOT_HEADER) && defined(CONFIG_BOOT_FLEXSPI_NOR)
 __attribute__((section(".boot_hdr.conf"), used))
 
+/* MX25U12832F 4READ (0xEB) default: 6 dummy cycles, max 66 MHz */
 #define FLASH_DUMMY_CYCLES 0x06
-#define FLASH_DUMMY_VALUE  0x06
 
 const flexspi_nor_config_t qspi_flash_config = {
 	.mem_config = {
@@ -25,19 +25,8 @@ const flexspi_nor_config_t qspi_flash_config = {
 		.controller_misc_option = 0x10,
 		.device_type = FLEXSPI_DEVICE_TYPE_SERIAL_NOR,
 		.sflash_pad_type = SERIAL_FLASH_4_PADS,
-		.serial_clk_freq = FLEXSPI_SERIAL_CLK_133MHZ,
+		.serial_clk_freq = FLEXSPI_SERIAL_CLK_60MHZ,
 		.sflash_a1_size = 16u * 1024u * 1024u,
-		/* Enable flash configuration feature */
-		.config_cmd_enable = 1u,
-		.config_mode_type[0] = DEVICE_CONFIG_CMD_TYPE_GENERIC,
-		/* Set configuration command sequences */
-		.config_cmd_seqs[0] = {
-			.seq_num = 1,
-			.seq_id = 12,
-			.reserved = 0,
-		},
-		/* Prepare setting value for Read Register in flash */
-		.config_cmd_args[0] = (FLASH_DUMMY_VALUE << 3),
 		.lookup_table = {
 			/* Read LUTs */
 			[0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD,
@@ -71,12 +60,6 @@ const flexspi_nor_config_t qspi_flash_config = {
 			/* Erase Chip LUTs */
 			[4 * 11 + 0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD,
 				0x60, STOP, FLEXSPI_1PAD, 0x0),
-
-			/* Set Read Register LUTs */
-			[4 * 12 + 0] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD,
-				0xC0, WRITE_SDR, FLEXSPI_1PAD, 0x01),
-			[4 * 12 + 1] = FLEXSPI_LUT_SEQ(STOP, FLEXSPI_1PAD,
-				0x00, 0, 0, 0),
 		},
 	},
 	.page_size = 256u,
